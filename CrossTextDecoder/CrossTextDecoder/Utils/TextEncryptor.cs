@@ -36,7 +36,6 @@ namespace TextDecoder.Utils
         private uint KeyIndex 
         {
             get => _keyIndex;
-            //set => _keyIndex = value == 0 ? 0 : (uint)Key.Length % value;
             set
             {
                 if(value == 0)
@@ -48,7 +47,6 @@ namespace TextDecoder.Utils
                     uint result = (uint)(value % (Key.Length));
                     _keyIndex = result;
                 }
-
             }
         }
 
