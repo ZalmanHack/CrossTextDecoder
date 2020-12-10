@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TextDecoder.Views.DecoderView" Visual="Material"
+             xmlns:sh="http://sharpnado.com">
+
+    
+    
+    
+    <Grid Padding="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" 
+               Text="Исходный текст" 
+               FontSize="Title" 
+               Padding="0,0,0,15"/>
+        <Editor Text="{Binding SourseText}" 
+                Grid.Row="1" />
+
+        
+        
+        <Grid Grid.Row="2" Padding="0,25,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Text="Ключ" VerticalTextAlignment="Center" FontSize="Title"/>
+            <Editor Text="{Binding EncryptKey}"  
+                    Grid.Column="1"  
+                    Margin="15,0,0,0"/>
+        </Grid>
+
+
+
+        <Grid Grid.Row="3" Padding="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding DecrCommand}" 
+                    IsEnabled="{Binding CanBeCrypt}"
+                    Grid.Column="0" 
+                    Text="Расшифровать" 
+                    Margin="0,0,0,0"/>
+            <Button Command="{Binding EncrCommand}"
+                    IsEnabled="{Binding CanBeCrypt}"
+                    Grid.Column="1" 
+                    Text="Зашифровать" 
+                    Margin="15,0,0,0"/>
+        </Grid>
+
+        
+        
+        <Label Grid.Row="4" 
+               Text="Сгенерированный текст" 
+               FontSize="Title" 
+               Padding="0,25,0,15"/>
+        <Editor Text="{Binding ResultText}"
+                Grid.Row="5"/>
+
+        
+        
+        <Grid Grid.Row="6" Padding="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding OpenCommand}" 
+                    Text="Открыть" 
+                    Grid.Column="0"/>
+            <Button Command="{Binding SaveCommand}" 
+                    IsEnabled="{Binding CanBeSave}"
+                    Text="Сохранить" 
+                    Grid.Column="1"
+                    Margin="15,0,0,0"/>
+            <Picker ItemsSource="{Binding DataFilesDialog}" 
+                    ItemDisplayBinding="{Binding TypeName}"
+                    SelectedItem="{Binding SelectedDataFileDialog}"
+                    Grid.Column="2" 
+                    Margin="15,0,0,0">
+            </Picker>
+        </Grid>
+        
+        
+        
+    </Grid>
+</ContentPage>
