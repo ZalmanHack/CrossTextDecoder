@@ -7,45 +7,38 @@ namespace TextDecoder.Utils
 {
     public class ReaderText : IReadable
     {
-        Encoding ANSI;
-        public ReaderText()
-        {
-            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            //ANSI = ntics.Text.Encoding1251.GetEncoding(1251);
-        }
+        static Encoding encode = null;
+
         public string Read(DataFileModel dataFile)
         {
-            Encoding encode = EncodingType.GetType(dataFile.Data);
+            encode = EncodingType.GetType(dataFile.Data);
             if(encode != null)
             {
-                var d = dataFile.Data;
-                return EncodingType.GetType(dataFile.Data).GetString(dataFile.Data);
+                return encode.GetString(dataFile.Data);
             }
             else
             {
                 return null;
             }
-
         }
 
         public byte[] Write(string text)
         {
-            try
+
+            if (!string.IsNullOrEmpty(text))
             {
-                if (!string.IsNullOrEmpty(text))
+                if(encode != null)
                 {
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    ANSI = ntics.Text.Encoding1251.GetEncoding(1251);
-                    return ANSI.GetBytes(text);
+                    return encode.GetBytes(text);
                 }
                 else
                 {
-                    return null;
+                    return Encoding.UTF8.GetBytes(text);
                 }
             }
-            catch (System.Exception)
+            else
             {
-                return Encoding.UTF8.GetBytes(text);
+                return null;
             }
         }
     }

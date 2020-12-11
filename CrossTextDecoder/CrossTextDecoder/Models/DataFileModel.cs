@@ -2,9 +2,9 @@
 {
     public class DataFileModel
     {
-        public string TypeFile { get; private set; }
-        public string NameFile { get; private set; }
-        public byte[] Data { get; private set; }
+        public string TypeFile { get;  set; }
+        public string NameFile { get;  set; }
+        public byte[] Data { get;  set; }
 
         public DataFileModel()
         {
