@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossTextDecoder.Android", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossTextDecoder", "CrossTextDecoder\CrossTextDecoder\CrossTextDecoder.csproj", "{00CDE3A0-9FA8-493F-95FD-27C75437D6B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossTextDecoderTests", "CrossTextDecoder\CrossTextDecoderTests\CrossTextDecoderTests.csproj", "{A614EBDA-D08E-4581-99FF-44F357FC9C90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossTextDecoderTests", "CrossTextDecoder\CrossTextDecoderTests\CrossTextDecoderTests.csproj", "{A614EBDA-D08E-4581-99FF-44F357FC9C90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

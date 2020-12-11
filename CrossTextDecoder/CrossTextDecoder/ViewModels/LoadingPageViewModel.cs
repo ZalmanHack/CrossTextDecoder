@@ -31,7 +31,7 @@ namespace TextDecoder.ViewModels
             SleepAsync(sleep);
         }
         
-        public async void SleepAsync(int sleep)
+        private async void SleepAsync(int sleep)
         {
             await Task.Run(() => Thread.Sleep(sleep));
             await Application.Current.MainPage.Navigation.PopAsync();
