@@ -19,7 +19,7 @@ ver 1.0.2
 - Syncfusion.DocIO.Net.Core - Для работы с документами Word
 - Sharpnado.Shadows - для возможности добавления теней в интерфейс
 ### UML диаграмма
-![alt text](https://raw.githubusercontent.com/ZalmanHack/CrossTextDecoder/master/CrossTextDecoder/CrossTextDecoder/diagrams/TextDecoder.png?token=ANJLZUI7VW2LFQUEXOPILIC73UNBC)
+![UML диаграмма](https://raw.githubusercontent.com/ZalmanHack/CrossTextDecoder/master/CrossTextDecoder/CrossTextDecoder/diagrams/TextDecoder.png?token=ANJLZUI7VW2LFQUEXOPILIC73UNBC)
 ### Структура проекта
 - Headers
   - EncodingType - определение кодировки текстового файла. Поддержиается
@@ -73,3 +73,7 @@ ver 1.0.2
 ## Интерфейс
 Интуитивно понятны и облегченный. Визуальный ряд был создан на основе неоморфизма.  
 С помощью асинхронных операций удалось добиться плавной работы интерфейса .
+
+<img src="CrossTextDecoder/CrossTextDecoder/Screenshots/2.jpg" width=270 height=480></td>
+<img src="CrossTextDecoder/CrossTextDecoder/Screenshots/1.jpg" width=270 height=480></td>
+<img src="CrossTextDecoder/CrossTextDecoder/Screenshots/3.jpg" width=540 height=305></td>
