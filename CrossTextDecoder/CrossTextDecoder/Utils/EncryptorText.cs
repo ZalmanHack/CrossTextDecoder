@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextDecoder.Utils
 {
-    public class TextEncryptor
+    public class EncryptorText
     {
         private string _text;
         private string _key;
-        private uint _textIndex;
         private uint _keyIndex;
 
         public string Alphabet { get; private set; } = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
@@ -64,27 +63,31 @@ namespace TextDecoder.Utils
 
         private string Encryptor(string text, string key, bool encrypt)
         {
-            Text = text;
-            Key = key;
-            string resultText = "";
-            int q = Alphabet.Length;
-            for (int i = 0; i < Text.Length; i++)
+            if(!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(key))
             {
-                if (Alphabet.IndexOf(char.ToLower(Text[i])) > -1)
+                Text = text;
+                Key = key;
+                string resultText = "";
+                int q = Alphabet.Length;
+                for (int i = 0; i < Text.Length; i++)
                 {
-                    int k = encrypt ? 1 : -1;
-                    int codeIndex = Alphabet.IndexOf(   Key[(int)KeyIndex]   );
-                    int letterIndex = Alphabet.IndexOf(Text[i]);
-                    int resultIndex = (q + letterIndex + (k * codeIndex)) % q;
-                    resultText += Alphabet[resultIndex];
-                    KeyIndex++;
+                    if (Alphabet.IndexOf(char.ToLower(Text[i])) > -1)
+                    {
+                        int k = encrypt ? 1 : -1;
+                        int codeIndex = Alphabet.IndexOf(Key[(int)KeyIndex]);
+                        int letterIndex = Alphabet.IndexOf(char.ToLower(Text[i]));
+                        int resultIndex = (q + letterIndex + (k * codeIndex)) % q;
+                        resultText += char.IsLower(Text[i]) ? Alphabet[resultIndex] : char.ToUpper(Alphabet[resultIndex]);
+                        KeyIndex++;
+                    }
+                    else
+                    {
+                        resultText += Text[i];
+                    }
                 }
-                else
-                {
-                    resultText += Text[i];
-                }
+                return resultText;
             }
-            return resultText;
+            return string.Empty;
         }
     }
 }

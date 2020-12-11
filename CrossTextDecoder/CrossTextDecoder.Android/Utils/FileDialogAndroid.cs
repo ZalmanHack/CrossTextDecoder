@@ -33,7 +33,7 @@ class FileDialogAndroid : IFileDialog
             string typeFile = arrayName[arrayName.Length - 1];
             return new DataFileModel(typeFile, fileData.FileName, fileData.DataArray);
         }
-        catch (Exception ex)
+        catch (Exception )
         {
             return new DataFileModel();
         }

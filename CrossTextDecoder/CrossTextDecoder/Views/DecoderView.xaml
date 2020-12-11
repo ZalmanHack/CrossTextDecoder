@@ -2,97 +2,349 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TextDecoder.Views.DecoderView" Visual="Material"
-             xmlns:sh="http://sharpnado.com">
+             xmlns:sh="http://sharpnado.com"
+             BackgroundColor="#ebe4dc">
 
-    
-    
-    
-    <Grid Padding="25">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" 
-               Text="Исходный текст" 
-               FontSize="Title" 
-               Padding="0,0,0,15"/>
-        <Editor Text="{Binding SourseText}" 
-                Grid.Row="1" />
 
-        
-        
-        <Grid Grid.Row="2" Padding="0,25,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Text="Ключ" VerticalTextAlignment="Center" FontSize="Title"/>
-            <Editor Text="{Binding EncryptKey}"  
-                    Grid.Column="1"  
-                    Margin="15,0,0,0"/>
+        <!-- Весь задний фон -->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" BackgroundColor="#79504a"/>
         </Grid>
 
+        <!-- Элементы интерфейса-->
+        <ScrollView Grid.Row="0">
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Верхний тулбар -->
+                <Grid Grid.Row="0" 
+                      Padding="20,20,20,0"
+                      BackgroundColor="#79504a">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Элементы управления файлами -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
 
-        <Grid Grid.Row="3" Padding="0,15,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Command="{Binding DecrCommand}" 
-                    IsEnabled="{Binding CanBeCrypt}"
-                    Grid.Column="0" 
-                    Text="Расшифровать" 
-                    Margin="0,0,0,0"/>
-            <Button Command="{Binding EncrCommand}"
+                        <sh:Shadows CornerRadius="10"
+                                    Grid.Column="0">
+                            <sh:Shadows.Shades>
+                                <sh:ImmutableShades>
+                                    <sh:Shade BlurRadius="10"
+                                              Opacity="0.5"
+                                              Offset="5,10"
+                                              Color="#5b3632" />
+                                    <sh:Shade BlurRadius="10"
+                                              Opacity="0.5"
+                                              Offset="-5,-5"
+                                              Color="#d1b9b6" />
+                                </sh:ImmutableShades>
+                            </sh:Shadows.Shades>
+                            <Button Command="{Binding OpenCommand}"
+                            WidthRequest="100"
+                            Text="Открыть"
+                            Margin="0,0,10,0"
+                            HeightRequest="20"
+                            FontSize="16"
+                            TextColor="#d1b9b5"
+                            BackgroundColor="#8a605a"
+                            CornerRadius="10"/>
+                        </sh:Shadows>
+
+                        <sh:Shadows CornerRadius="10"
+                                    Grid.Column="1">
+                            <sh:Shadows.Shades>
+                                <sh:ImmutableShades>
+                                    <sh:Shade BlurRadius="10"
+                                              Opacity="0.5"
+                                              Offset="5,10"
+                                              Color="#5b3632" />
+                                    <sh:Shade BlurRadius="10"
+                                              Opacity="0.5"
+                                              Offset="-5,-5"
+                                              Color="#d1b9b6" />
+                                </sh:ImmutableShades>
+                            </sh:Shadows.Shades>
+                            <Button Command="{Binding SaveCommand}"
+                            WidthRequest="100"
+                            Text="Сохранить"
+                            Margin="0,0,10,0"
+                            HeightRequest="20"
+                            FontSize="16"
+                            TextColor="#d1b9b5"
+                            BackgroundColor="#8a605a"
+                            CornerRadius="10"/>
+                        </sh:Shadows>
+
+
+                        <Picker ItemsSource="{Binding DataFilesDialog}" 
+                            ItemDisplayBinding="{Binding TypeName}"
+                            SelectedItem="{Binding SelectedDataFileDialog}"
+                            FontSize="16"
+                            Grid.Column="2" 
+                            TextColor="#ebe4dc"
+                            WidthRequest="130"
+                            Margin="0,0,0,0"/>
+                    </Grid>
+
+                    <!--Кнопки для ключа шифрования -->
+                    <Grid  Grid.Row="1" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Text="Ключ" WidthRequest="75" FontSize="Title" VerticalOptions="Center" TextColor="#d1b9b6"/>
+                        <Editor Text="{Binding EncryptKey}" AutoSize="TextChanges" Background="#79504a" TextColor="#d1b9b6" WidthRequest="150" Grid.Column="1"  Margin="10,0,0,0"/>
+                    </Grid>
+
+                </Grid>
+                
+                <!-- Исходный текст -->
+                <Grid Grid.Row="1" Padding="20,10">
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Frame Grid.Row="0" BackgroundColor="White" CornerRadius="10" HasShadow="True">
+                        <Grid Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0"
+                            Text="Исходный текст" 
+                            TextColor="#79504a"
+                            FontSize="Title" 
+                            Padding="0,0,0,10"/>
+                            <Editor Text="{Binding SourseText}"
+                            Grid.Row="1"
+                            Background="White"
+                            TextColor="#79504a"
+                            AutoSize="TextChanges"/>
+                        </Grid>
+                    </Frame>
+                    <Label Grid.Row="0" HorizontalOptions="End" WidthRequest="3" BackgroundColor="#b40000" Margin="0,0,10,0"></Label>
+                </Grid>
+
+                <!-- Обработанный текст -->
+                <Grid Grid.Row="2" Padding="20,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Frame Grid.Row="0" BackgroundColor="White" CornerRadius="10" HasShadow="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" 
+                                Text="Обработанный текст" 
+                                TextColor="#79504a"
+                                FontSize="Title" 
+                                Padding="0,0,0,10"/>
+                            <Editor Text="{Binding ResultText}"
+                                AutoSize="TextChanges"  
+                                Background="White"
+                                TextColor="#79504a"
+                                IsReadOnly="true"
+                                Grid.Row="1"/>
+                        </Grid>
+                    </Frame>
+                    <Label Grid.Row="0" HorizontalOptions="End" WidthRequest="3" BackgroundColor="#00b400" Margin="0,0,10,0"></Label>
+                </Grid>
+            </Grid>
+        </ScrollView>
+
+        <!-- Кнопки обработки текста -->
+        <Grid WidthRequest="130" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,15,15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <sh:Shadows CornerRadius="30" 
+                        Grid.Row="0" 
+                        Margin="0,0,0,12"
+                        Shades="{sh:SingleShade Offset='0, 10', Opacity=0.7, Color='#5b3632'}">
+                <Button Command="{Binding EncrCommand}"
+                    WidthRequest="130"
+                    HeightRequest="60"
+                    TextColor="#ebe4dc"
+                    Text="Зашифровать"
+                    FontSize="16"
+                    BackgroundColor="#5b3632"
+                    CornerRadius="30"/>
+            </sh:Shadows>
+
+            <sh:Shadows CornerRadius="30" Grid.Row="1" Shades="{sh:SingleShade Offset='0, 10', Opacity=0.7, Color='#5b3632'}">
+                <Button Command="{Binding DecrCommand}" 
+                    WidthRequest="130"
+                    HeightRequest="60"
+                    TextColor="#ebe4dc"
+                    Text="Расшифровать"
+                    FontSize="16"
+                    BackgroundColor="#5b3632"
+                    CornerRadius="30"/>
+            </sh:Shadows>
+        </Grid>
+    </Grid>
+</ContentPage>
+
+
+
+
+
+<!--
+    <ContentPage.Resources>
+        <Style ApplyToDerivedTypes="True" TargetType="sh:Shadows">
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Shades">
+                <sh:ImmutableShades>
+                    <sh:Shade BlurRadius="10"
+                      Opacity="1"
+                      Offset="-10,-10"
+                      Color="White" />
+                    <sh:Shade BlurRadius="10"
+                      Opacity="1"
+                      Offset="6, 6"
+                      Color="#19000000" />
+                </sh:ImmutableShades>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+
+
+        
+
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <ScrollView Grid.Row="0">
+            <Grid Padding="25" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" 
+                   Text="Исходный текст" 
+                   FontSize="Title" 
+                   Padding="0,0,0,15"/>
+
+
+                <Editor Text="{Binding SourseText}"
+                        Background="#79504a"
+                        TextColor="White"
+                    AutoSize="TextChanges"
+                    Grid.Row="1" />
+
+                <Grid Grid.Row="2" Padding="0,25,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="Ключ" VerticalTextAlignment="Center" FontSize="Title"/>
+                    <Editor Text="{Binding EncryptKey}"  
+                        AutoSize="TextChanges"
+                    Grid.Column="1"  
+                    Margin="15,0,0,0"/>
+                </Grid>
+
+                <Grid Grid.Row="3" Padding="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding DecrCommand}" 
+                            IsEnabled="{Binding CanBeCrypt}"
+                            Grid.Column="0" 
+                            Text="Расшифровать" 
+                             Margin="0,0,0,0"/>
+                    <Button Command="{Binding EncrCommand}"
                     IsEnabled="{Binding CanBeCrypt}"
                     Grid.Column="1" 
                     Text="Зашифровать" 
                     Margin="15,0,0,0"/>
-        </Grid>
+                </Grid>
 
-        
-        
-        <Label Grid.Row="4" 
+                <Label Grid.Row="4" 
                Text="Сгенерированный текст" 
                FontSize="Title" 
                Padding="0,25,0,15"/>
-        <Editor Text="{Binding ResultText}"
+
+                <Editor Text="{Binding ResultText}"
+                    AutoSize="TextChanges"
                 Grid.Row="5"/>
 
-        
-        
-        <Grid Grid.Row="6" Padding="0,15,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Command="{Binding OpenCommand}" 
+                <Grid Grid.Row="6" Padding="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding OpenCommand}" 
                     Text="Открыть" 
                     Grid.Column="0"/>
-            <Button Command="{Binding SaveCommand}" 
+                    <Button Command="{Binding SaveCommand}" 
                     IsEnabled="{Binding CanBeSave}"
                     Text="Сохранить" 
                     Grid.Column="1"
                     Margin="15,0,0,0"/>
-            <Picker ItemsSource="{Binding DataFilesDialog}" 
+                    <Picker ItemsSource="{Binding DataFilesDialog}" 
                     ItemDisplayBinding="{Binding TypeName}"
                     SelectedItem="{Binding SelectedDataFileDialog}"
                     Grid.Column="2" 
                     Margin="15,0,0,0">
-            </Picker>
-        </Grid>
-        
-        
-        
+                    </Picker>
+                </Grid>
+            </Grid>
+        </ScrollView>
+
+
+        <sh:Shadows Grid.Column="0">
+            <Button WidthRequest="60"
+                         HeightRequest="60"
+                         Padding="20"
+                         HorizontalOptions="End" 
+                         VerticalOptions="End"
+                         Margin="0,0,50,50"
+                         BackgroundColor="#F0F"
+                         CornerRadius="20"/>
+        </sh:Shadows>
+
     </Grid>
-</ContentPage>
+-->

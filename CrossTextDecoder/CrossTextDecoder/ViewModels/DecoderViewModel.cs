@@ -11,7 +11,7 @@ namespace TextDecoder.ViewModels
 {
     public class DecoderViewModel : BaseViewModel
     {
-        private static int ShowTime = 1500; 
+        private static int ShowTime = 2000;
         private DataModel Data;
         public DecoderViewModel()
         {
@@ -25,15 +25,23 @@ namespace TextDecoder.ViewModels
         }
 
         #region Properties [MODEL]
-        public string SourseText 
-        { 
-            get => Data.SourseText; 
+        public string SourseText
+        {
+            get => Data.SourseText;
             set
             {
-                if(Data.SourseText != value)
+                if (Data.SourseText != value)
                 {
                     Data.SourseText = value;
                     OnPropertyChanged();
+                    if (!string.IsNullOrEmpty(EncryptKey) && !string.IsNullOrEmpty(SourseText))
+                    {
+                        CanBeCrypt = true;
+                    }
+                    else
+                    {
+                        CanBeCrypt = false;
+                    }
                 }
             }
         }
@@ -46,8 +54,7 @@ namespace TextDecoder.ViewModels
                 {
                     Data.ResultText = value;
                     OnPropertyChanged();
-
-                    if(!string.IsNullOrEmpty(value))
+                    if (!string.IsNullOrEmpty(ResultText))
                     {
                         CanBeSave = true;
                     }
@@ -67,8 +74,7 @@ namespace TextDecoder.ViewModels
                 {
                     Data.EncryptKey = value;
                     OnPropertyChanged();
-
-                    if (!string.IsNullOrEmpty(value))
+                    if (!string.IsNullOrEmpty(EncryptKey) && !string.IsNullOrEmpty(SourseText))
                     {
                         CanBeCrypt = true;
                     }
@@ -84,7 +90,6 @@ namespace TextDecoder.ViewModels
         #region Properties [MODEL VIEW] 
         private bool _canBeSave;
         private bool _canBeCrypt;
-        private bool _isAwait;
         private List<DataFileDialogModel> _dataFilesDialog;
         private DataFileDialogModel _selectedDataFileDialog;
 
@@ -93,7 +98,7 @@ namespace TextDecoder.ViewModels
             get => _canBeSave;
             private set
             {
-                if(_canBeSave != value)
+                if (_canBeSave != value)
                 {
                     _canBeSave = value;
                     OnPropertyChanged();
@@ -108,18 +113,6 @@ namespace TextDecoder.ViewModels
                 if (_canBeCrypt != value)
                 {
                     _canBeCrypt = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private bool IsAwait
-        {
-            get => _isAwait;
-            set
-            {
-                if(_isAwait != value)
-                {
-                    _isAwait = value;
                     OnPropertyChanged();
                 }
             }
@@ -183,7 +176,9 @@ namespace TextDecoder.ViewModels
                 await CloseLoadingPageAsync();
                 if (result == null)
                 {
-                    await ShowLoadingPageAsync($"Ошибка\n\nФайл {dataFile.NameFile} не поодерживается", ShowTime);
+                    await ShowLoadingPageAsync($"Ошибка\n\nФайл {dataFile.NameFile} не поддерживается" +
+                        $"\n\nДля открытия файлов ANSI, запустите приложение в режиме Debug!" +
+                        $"\n\nПоддерживаемые форматы в Release:\nUTF-8, Unicode, ASCII, Docx, Doc, Dot.", ShowTime);
                 }
                 else
                 {
@@ -194,62 +189,86 @@ namespace TextDecoder.ViewModels
 
         private async void SaveFile()
         {
-            byte[] data = null;
-            if(SelectedDataFileDialog.FileType == ".docx")
+            if (CanBeSave)
             {
-                data = new ReaderWord().Write(ResultText);
-            } else if(SelectedDataFileDialog.FileType == ".txt")
-            {
-                data = new ReaderText().Write(ResultText);
+                byte[] data = null;
+                if (SelectedDataFileDialog.FileType == ".docx")
+                {
+                    data = new ReaderWord().Write(ResultText);
+                }
+                else if (SelectedDataFileDialog.FileType == ".txt")
+                {
+                    data = new ReaderText().Write(ResultText);
+                }
+                if (data != null)
+                {
+                    var filePath = await Xamarin.Forms.DependencyService.Get<IFileDialog>().SaveAsync(data, SelectedDataFileDialog);
+                    await ShowLoadingPageAsync($"{filePath}", ShowTime);
+                }
             }
-            if (data != null)
+            else
             {
-                var filePath = await Xamarin.Forms.DependencyService.Get<IFileDialog>().SaveAsync(data, SelectedDataFileDialog);
-                await ShowLoadingPageAsync($"{filePath}", ShowTime);
+                await ShowLoadingPageAsync("Сохранение невозможно\nФайл не может быть пустым", ShowTime);
             }
         }
-        
+
         private async void EncryptText()
         {
-            await ShowLoadingPageAsync("Подождите, идет шифрование текста");
-            ResultText = await new TextEncryptor().Encrypt(SourseText, EncryptKey);
-            await CloseLoadingPageAsync();
+            try
+            {
+                if (CanBeCrypt)
+                {
+                    await ShowLoadingPageAsync("Подождите, идет шифрование текста");
+                    ResultText = await new EncryptorText().Encrypt(SourseText, EncryptKey);
+                    await CloseLoadingPageAsync();
+                }
+                else
+                {
+                    await ShowLoadingPageAsync("Заполните все поля", ShowTime);
+                }
+            }
+            catch (System.Exception)
+            {
+                await ShowLoadingPageAsync("Не удалось зашифровать файл", ShowTime);
+            }
         }
 
         private async void DecryptText()
         {
-            await ShowLoadingPageAsync("Подождите, идет расшифровка текста");
-            ResultText = await new TextEncryptor().Decrypt(SourseText, EncryptKey);
-            await CloseLoadingPageAsync();
+            try
+            {
+                if (CanBeCrypt)
+                {
+                    await ShowLoadingPageAsync("Подождите, идет расшифровка текста");
+                    ResultText = await new EncryptorText().Decrypt(SourseText, EncryptKey);
+                    await CloseLoadingPageAsync();
+                }
+                else
+                {
+                    await ShowLoadingPageAsync("Заполните все поля", ShowTime);
+                }
+            }
+            catch (System.Exception)
+            {
+                await ShowLoadingPageAsync("Не удалось расшифровать файл", ShowTime);
+            }
         }
         #endregion
 
         #region LoadingPage methods
         private async Task ShowLoadingPageAsync(string message)
         {
-            if(!IsAwait)
-            {
-                IsAwait = true;
-                await Application.Current.MainPage.Navigation.PushAsync(new LoadingPage(message));
-            }
+            await Application.Current.MainPage.Navigation.PushAsync(new LoadingPage(message));
         }
 
         private async Task ShowLoadingPageAsync(string message, int showTime)
         {
-            if (!IsAwait)
-            {
-                IsAwait = true;
-                await Application.Current.MainPage.Navigation.PushAsync(new LoadingPage(message, showTime));
-            }
+            await Application.Current.MainPage.Navigation.PushAsync(new LoadingPage(message, showTime));
         }
 
         private async Task CloseLoadingPageAsync()
         {
-            if (IsAwait)
-            {
-                await Application.Current.MainPage.Navigation.PopAsync();
-                IsAwait = false;
-            }
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
         #endregion
     }
